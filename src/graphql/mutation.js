@@ -21,8 +21,8 @@ mutation insertstudent($id: String!, $key: String!) {
 
 export const DELETE_STUDENT_LIST =gql`
 
-mutation deletestudent ($id: String!, $key: String!) {
-    deletestudent (id: $id, key: $key) {
+mutation deletestudent ($id: String!) {
+    deletestudent (id: $id) {
           statuscode
           message
     }

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navigationbar from '../components/Navigationbar';
 import { GET_STUDENT_LIST_DETAILS } from '../../graphql/queries';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useCart } from '../context/CartContext';
+import { DELETE_STUDENT_LIST } from '../../graphql/mutation';
+import MyForm from '../components/Myform';
 
 const WatchSingle = () => {
   const [watchData, setWatchData] = useState(null);
   const { id } = useParams();
   const { addToCart, cartItems } = useCart();
+  const [check, setCheck] = useState(false);
 
   const { data, networkStatus, refetch } = useQuery(GET_STUDENT_LIST_DETAILS, {
     variables: {
@@ -27,6 +30,25 @@ const WatchSingle = () => {
 
   const product = watchData && watchData[0];
 
+  const navigate = useNavigate();
+
+  const [deletion] = useMutation(DELETE_STUDENT_LIST, {
+    onCompleted(data) {
+      navigate('/');
+    },
+  });
+
+  const deleteProduct = () => {
+    deletion({
+      variables: {
+        id: product.ID,
+      },
+    });
+  };
+
+  const updateProduct = () => {
+    setCheck (true)
+  }
   return (
     <>
       <Navigationbar />
@@ -47,7 +69,16 @@ const WatchSingle = () => {
           <div className="ind-desc space">
             <p>{product && product.Description}</p>
           </div>
-          <button onClick={() => addToCart(product)}>Add to Cart</button>
+          {!check && (
+            <>
+              <button onClick={() => addToCart(product)}>Add to Cart</button> &nbsp;
+              <button onClick={() => deleteProduct(product)}>Remove from DB</button> &nbsp;
+              <div>
+                <button style={{ marginTop: "15px" }} onClick={() => updateProduct(product)}>Update DB</button>
+              </div>
+            </>
+          )}
+           {check && <MyForm setCheck = {setCheck} id = {product.ID} /> }
         </div>
       </div>
     </>

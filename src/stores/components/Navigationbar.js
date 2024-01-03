@@ -19,9 +19,9 @@ import { useCart } from '../context/CartContext'
         <input type="text" placeholder="Search..." />
         </div>
         <div className="user">
-          <div className="user-detail">Edit</div>
+          {/* <div className="user-detail">Edit</div>
           <div className="user-detail">Delete</div>
-          <div className="user-detail">Create</div>
+          <div className="user-detail">Create</div> */}
         </div>
         <Link to= '/cart'>
           <div className="cart">Cart
