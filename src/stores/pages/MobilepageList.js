@@ -5,7 +5,8 @@ import { GET_STUDENT_LIST_DETAILS } from '../../graphql/queries';
 import { useQuery } from '@apollo/client';
 
 const MobilePage = () => {
-  const [mobileData, setmobileData] = useState(null);
+  const [mobileData, setmobileData] = useState([]);
+  const [selectedCheckProduct, setSelectedCheckProduct] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState([]);
 
   const { data, networkStatus, refetch } = useQuery(GET_STUDENT_LIST_DETAILS, {
@@ -19,35 +20,37 @@ const MobilePage = () => {
     },
   });
 
-  useEffect(() => {
-    if (mobileData) {
-      setmobileData(mobileData.filter((item) => item.Category === 'Mobile'));
-    }
-  }, [mobileData]);
+  const selectedItemData = mobileData.filter((item) => item.Category === 'Mobile')
 
-  const companyHandler = (mango) => {
-    if (selectedProduct.includes(mango)) {
-      setSelectedProduct(selectedProduct.filter((item) => item !== mango));
+  const companyHandler = (event) => {
+    console.log(event, "event")
+    setSelectedCheckProduct(event)
+
+
+    if (selectedProduct.includes(event)) {
+      setSelectedProduct(selectedProduct.filter((item) => item !== event));
     } else {
-      setSelectedProduct([...selectedProduct, mango]);
+      setSelectedProduct([...selectedProduct, event]);
     }
   };
 
+  console.log(selectedItemData, "selectedItemData")
+
   const filteredProduct =
-    selectedProduct.length === 0 ? mobileData : mobileData.filter((orange) => selectedProduct.includes(orange.Company));
+    selectedProduct.length === 0 ? selectedItemData : selectedItemData.filter((item) => item.Company === selectedCheckProduct);
 
   return (
     <>
       <Navigationbar />
       <div className="fullpage">
         <div className="pro-selected">
-          {filteredProduct &&
-            filteredProduct.map((phone) => (
+          {selectedItemData &&
+            selectedItemData.map((phone) => (
               <div className="pro-input" key={phone.id}>
                 <label>
                   <input
                     type="checkbox"
-                    checked={selectedProduct.includes(phone.Company)}
+                    checked={phone.Company === selectedCheckProduct}
                     onChange={() => companyHandler(phone.Company)}
                   />
                   {phone.Company}

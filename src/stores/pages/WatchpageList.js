@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/client';
 
 const WatchPage = () => {
   const [watchData, setWatchData] = useState(null);
+  const [selectedCheckProduct, setSelectedCheckProduct] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState([]);
 
   const { data, networkStatus, refetch } = useQuery(GET_STUDENT_LIST_DETAILS, {
@@ -25,32 +26,34 @@ const WatchPage = () => {
     }
   }, [watchData]);
 
-  const companyHandler = (mango) => {
-    if (selectedProduct.includes(mango)) {
-      setSelectedProduct(selectedProduct.filter((item) => item !== mango));
+  const companyHandler = (event) => {
+    setSelectedCheckProduct(event);
+
+    if (selectedProduct.includes(event)) {
+      setSelectedProduct(selectedProduct.filter((item) => item !== event));
     } else {
-      setSelectedProduct([...selectedProduct, mango]);
+      setSelectedProduct([...selectedProduct, event]);
     }
   };
 
   const filteredProduct =
-    selectedProduct.length === 0 ? watchData : watchData.filter((orange) => selectedProduct.includes(orange.Company));
+    selectedProduct.length === 0 ? watchData : watchData.filter((item) => item.Company === selectedCheckProduct);
 
   return (
     <>
       <Navigationbar />
       <div className="fullpage">
         <div className="pro-selected">
-          {filteredProduct &&
-            filteredProduct.map((phone) => (
-              <div className="pro-input" key={phone.id}>
+          {watchData &&
+            watchData.map((watch) => (
+              <div className="pro-input" key={watch.id}>
                 <label>
                   <input
                     type="checkbox"
-                    checked={selectedProduct.includes(phone.Company)}
-                    onChange={() => companyHandler(phone.Company)}
+                    checked={watch.Company === selectedCheckProduct}
+                    onChange={() => companyHandler(watch.Company)}
                   />
-                  {phone.Company}
+                  {watch.Company}
                 </label>
               </div>
             ))}
