@@ -1,12 +1,17 @@
 import { React, useState } from "react";
 import { GET_STUDENT_LIST_DETAILS } from "../../graphql/queries";
-// import { Link } from 'react-router-dom'
 import { useQuery, useMutation} from '@apollo/client';
+import { mobileDataReducer } from "../../redux/reducer";
+import { useDispatch, useSelector } from "react-redux";
 
 
 const Mobiles = () => {
     
-    const [mobileData, setMobileData] = useState(null);
+  const dispatch = useDispatch();
+  const { mobileapidata } = useSelector((state) => state.counter)
+  const [mobileData, setMobileData] = useState(mobileapidata);
+
+    console.log(mobileapidata, "asdas")
 
     const {data, networkStatus, refetch } = useQuery(GET_STUDENT_LIST_DETAILS, {
       variables: {
@@ -15,7 +20,9 @@ const Mobiles = () => {
       fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
       onCompleted: (data) => {
-        setMobileData (data?.getstudentList?.data);
+        dispatch(mobileDataReducer(data?.getstudentList?.data))
+
+        // setMobileData (data?.getstudentList?.data);
       },
     });
   

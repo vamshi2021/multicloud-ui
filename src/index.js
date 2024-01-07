@@ -11,17 +11,14 @@ import { CartProvider } from './stores/context/CartContext';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ApolloProvider client={client}>
     <React.StrictMode>
-      {/* <Provider store={store}> */}
+      <Provider store={store}>  
     <CartProvider>
       <App/>
     </CartProvider>
-      {/* </Provider> */}
+      </Provider>
     </React.StrictMode>
   </ApolloProvider>
 );
  
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
  
