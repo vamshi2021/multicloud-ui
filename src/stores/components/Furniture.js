@@ -1,11 +1,16 @@
 import { React, useState } from "react";
 import { GET_STUDENT_LIST_DETAILS } from "../../graphql/queries";
-// import { Link } from 'react-router-dom'
 import { useQuery, useMutation} from '@apollo/client';
+import { furnitureDataReducer } from "../../redux/reducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const Furniture = () => {
 
-    const [furnitureData, setFurnitureData] = useState(null);
+    const dispatch = useDispatch();
+
+    const {furnitureapidata} = useSelector((state) => (state.counter));
+
+    const [furnitureData, setFurnitureData] = useState(furnitureapidata);
 
     const {data, networkStatus, refetch } = useQuery(GET_STUDENT_LIST_DETAILS, {
       variables: {
@@ -14,7 +19,7 @@ const Furniture = () => {
       fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
       onCompleted: (data) => {
-        setFurnitureData (data?.getstudentList?.data);
+        dispatch(furnitureDataReducer(data?.getstudentList?.data))
       },
     });
 

@@ -13,7 +13,7 @@ const WatchSingle = () => {
   const { addToCart, cartItems } = useCart();
   const [check, setCheck] = useState(false);
 
-  const { data, networkStatus, refetch } = useQuery(GET_STUDENT_LIST_DETAILS, {
+  const {} = useQuery(GET_STUDENT_LIST_DETAILS, {
     variables: {
       infra: 'infraname',
     },
