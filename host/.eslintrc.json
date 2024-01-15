@@ -1,0 +1,6 @@
+{
+    "globals": {
+      "__webpack_init_sharing__": "readonly",
+      "__webpack_share_scopes__": "readonly"
+    }
+  }
