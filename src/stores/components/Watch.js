@@ -1,15 +1,11 @@
 import { React, useState } from "react";
 import { GET_STUDENT_LIST_DETAILS } from "../../graphql/queries";
+// import { Link } from 'react-router-dom'
 import { useQuery, useMutation} from '@apollo/client';
-import { watchDataReducer } from "../../redux/reducer";
-import { useDispatch, useSelector } from "react-redux";
 
 const Watch = () => {
-  const dispatch = useDispatch();
 
-  const {watchapidata} = useSelector((state) => state.counter)
-
-  const [watchData, setWatchData] = useState(watchapidata);
+    const [watchData, setWatchData] = useState(null);
 
     const {data, networkStatus, refetch } = useQuery(GET_STUDENT_LIST_DETAILS, {
       variables: {
@@ -18,7 +14,7 @@ const Watch = () => {
       fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
       onCompleted: (data) => {
-        dispatch(watchDataReducer(data?.getstudentList?.data))
+        setWatchData(data?.getstudentList?.data);
       },
     });
 
@@ -27,14 +23,18 @@ const Watch = () => {
 
   return (
     <>
-    <div className="proTitle"><h2>Watches</h2> </div>
+   <div className="proTitle"><h2>Watches</h2> </div>
+
     <div className='proSection'>
          {
              firstFiveImages && firstFiveImages.map((item)=>{
                  return(
                   item.Category === "Wearable" && 
+
                      <div className='imgBox'>
-                     <img className='proImage' src={item.Image} alt="watch data loading" />  
+                       
+                         <img className='proImage' src={item.Image} alt="watch data loading" />
+                       
                      </div>
                  )
              })

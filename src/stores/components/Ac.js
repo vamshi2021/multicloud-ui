@@ -2,16 +2,10 @@ import { React, useState } from "react";
 // import { Link } from "react-router-dom";
 import { GET_STUDENT_LIST_DETAILS } from "../../graphql/queries";
 import { useQuery, useMutation} from '@apollo/client';
-import { acDataReducer } from "../../redux/reducer";
-import { useDispatch, useSelector } from "react-redux";
 
 const AC = () => {
 
-  const dispatch = useDispatch();
-
-  const {acapidata} = useSelector((state) => (state.counter));
-
-  const [acData, setAcData] = useState(acapidata);
+  const [acData, setAcData] = useState(null);
 
   const {data, networkStatus, refetch } = useQuery(GET_STUDENT_LIST_DETAILS, {
     variables: {
@@ -20,7 +14,7 @@ const AC = () => {
     fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
-      dispatch(acDataReducer(data?.getstudentList?.data))
+      setAcData (data?.getstudentList?.data);
     },
   });
 
